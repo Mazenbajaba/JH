@@ -3,16 +3,24 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'motion/react';
-import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Menu, X, Diamond, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
-import { Globe } from 'lucide-react';
 
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t, isRTL } = useLanguage();
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { name: t('home'), href: '/' },
@@ -21,27 +29,31 @@ export default function Header() {
   ];
 
   return (
-    <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/5",
-      isRTL ? "font-arabic" : "font-sans"
-    )}>
+    <header
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        isScrolled 
+          ? "bg-luxury-black/95 backdrop-blur-xl border-b border-gold/10 py-3" 
+          : "bg-transparent py-6"
+      )}
+    >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex-shrink-0">
-            <Link href="/" className="font-serif text-2xl tracking-widest font-bold text-black">
+        <div className="flex justify-between items-center">
+          <Link href="/" className="group flex items-center gap-3">
+            <Diamond className="w-6 h-6 text-gold transition-transform duration-500 group-hover:rotate-12" />
+            <span className="font-display text-2xl tracking-[0.3em] font-bold text-cream">
               AURELIA
-            </Link>
-          </div>
+            </span>
+          </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-10">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "text-sm uppercase tracking-widest transition-colors hover:text-black/60",
-                  pathname === item.href ? "text-black font-semibold" : "text-black/40"
+                  "relative font-medium tracking-wider text-sm transition-colors duration-300 link-underline",
+                  pathname === item.href ? "text-gold" : "text-cream-muted hover:text-cream"
                 )}
               >
                 {item.name}
@@ -50,7 +62,7 @@ export default function Header() {
             
             <button
               onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
-              className="flex items-center gap-2 text-xs uppercase tracking-widest font-bold text-black/60 hover:text-black transition-colors"
+              className="flex items-center gap-2 text-xs uppercase tracking-widest font-medium text-gold-muted hover:text-gold transition-colors"
             >
               <Globe size={14} />
               {t('switchLanguage')}
@@ -58,68 +70,67 @@ export default function Header() {
 
             <Link
               href="/contact"
-              className="bg-black text-white px-6 py-2 rounded-full text-sm uppercase tracking-widest font-medium hover:bg-black/80 transition-all"
+              className="btn-gold px-8 py-3 rounded-full text-xs tracking-[0.15em]"
             >
               {t('contact')}
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-black p-2 focus:outline-none"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="lg:hidden text-cream p-2 focus:outline-none"
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </nav>
 
-      {/* Mobile Nav */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={cn(
-            "md:hidden bg-white border-b border-black/5 px-4 pt-2 pb-6 space-y-4",
-            isRTL ? "font-arabic" : "font-sans"
-          )}
-        >
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              onClick={() => setIsOpen(false)}
-              className={cn(
-                "block text-sm uppercase tracking-widest py-2",
-                pathname === item.href ? "text-black font-semibold" : "text-black/40"
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
-          
-          <button
-            onClick={() => {
-              setLanguage(language === 'ar' ? 'en' : 'ar');
-              setIsOpen(false);
-            }}
-            className="flex items-center gap-2 text-xs uppercase tracking-widest font-bold text-black/60 py-2"
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="lg:hidden bg-luxury-charcoal/98 backdrop-blur-xl border-t border-gold/10"
           >
-            <Globe size={14} />
-            {t('switchLanguage')}
-          </button>
+            <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "block text-lg tracking-wider py-3 border-b border-gold/5",
+                    pathname === item.href ? "text-gold" : "text-cream-muted"
+                  )}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              
+              <button
+                onClick={() => {
+                  setLanguage(language === 'ar' ? 'en' : 'ar');
+                  setIsOpen(false);
+                }}
+                className="flex items-center gap-3 text-gold-muted py-3"
+              >
+                <Globe size={16} />
+                {t('switchLanguage')}
+              </button>
 
-          <Link
-            href="/contact"
-            onClick={() => setIsOpen(false)}
-            className="block bg-black text-white px-6 py-3 rounded-full text-sm uppercase tracking-widest font-medium text-center"
-          >
-            {t('contact')}
-          </Link>
-        </motion.div>
-      )}
+              <Link
+                href="/contact"
+                onClick={() => setIsOpen(false)}
+                className="block btn-gold px-8 py-4 rounded-full text-center text-sm tracking-[0.15em] mt-6"
+              >
+                {t('contact')}
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

@@ -1,33 +1,46 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display, Noto_Sans_Arabic } from 'next/font/google';
+import { Playfair_Display, Cormorant_Garamond, Amiri, Tajawal } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-});
-
 const playfair = Playfair_Display({
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-playfair',
+  display: 'swap',
 });
 
-const notoArabic = Noto_Sans_Arabic({
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  variable: '--font-cormorant',
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+});
+
+const amiri = Amiri({
   subsets: ['arabic'],
-  variable: '--font-arabic',
+  weight: ['400', '700'],
+  variable: '--font-amiri',
+  display: 'swap',
+});
+
+const tajawal = Tajawal({
+  subsets: ['arabic'],
+  weight: ['300', '400', '500', '700'],
+  variable: '--font-tajawal',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'أوريليا | معرض مجوهرات فاخرة',
-  description: 'اختبر قمة الحرفية في صناعة المجوهرات مع أوريليا.',
+  title: 'Aurelia | Luxury Jewelry',
+  description: 'Experience the pinnacle of jewelry craftsmanship with Aurelia.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <LanguageProvider>
-      <html lang="ar" dir="rtl" className={`${inter.variable} ${playfair.variable} ${notoArabic.variable}`}>
-        <body className="font-sans antialiased bg-[#FDFCFB] text-[#1A1A1A]" suppressHydrationWarning>
+      <html lang="ar" dir="rtl" className={`${playfair.variable} ${cormorant.variable} ${amiri.variable} ${tajawal.variable}`}>
+        <body className="font-cormorant antialiased bg-luxury-black text-cream min-h-screen" suppressHydrationWarning>
+          <div className="grain-overlay" />
           {children}
         </body>
       </html>

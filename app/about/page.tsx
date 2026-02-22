@@ -20,22 +20,22 @@ export default function About() {
   ];
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-luxury-black">
       <Header />
       
       <div className={cn(
-        "pt-32",
-        isRTL ? "font-arabic" : "font-sans"
+        "pt-40",
+        isRTL ? "font-arabic" : "font-cormorant"
       )}>
-        {/* Story Section */}
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
             <motion.div
               initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="relative aspect-[4/5] rounded-3xl overflow-hidden"
+              className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-gold/10"
             >
+              <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/20 to-transparent z-10" />
               <Image
                 src="https://drive.google.com/uc?id=1QOZUeogRlLmV7Qyrc1WUdbj6rWM3ijLe"
                 alt="Craftsmanship"
@@ -50,12 +50,14 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-xs uppercase tracking-[0.3em] font-bold text-black/40 mb-6 block">{t('aboutLegacy')}</span>
+              <span className="text-gold text-xs uppercase tracking-[0.3em] font-semibold mb-6 block">
+                {t('aboutLegacy')}
+              </span>
               <h1 
-                className="font-serif text-5xl md:text-6xl mb-8 leading-tight"
+                className="font-display text-5xl md:text-6xl lg:text-7xl text-cream mb-8 leading-tight"
                 dangerouslySetInnerHTML={{ __html: t('aboutTitle') }}
               />
-              <div className="space-y-6 text-black/60 font-light leading-relaxed text-lg">
+              <div className="space-y-6 text-cream-muted font-light leading-relaxed text-lg">
                 <p>{t('aboutP1')}</p>
                 <p>{t('aboutP2')}</p>
                 <p>{t('aboutP3')}</p>
@@ -64,18 +66,24 @@ export default function About() {
           </div>
         </section>
 
-        {/* Values Section */}
-        <section className="py-24 bg-[#F8F7F5]">
+        <section className="py-24 bg-luxury-charcoal/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {values.map((value, index) => (
-                <div key={value.title} className="text-center">
-                  <div className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-serif">
+                <motion.div 
+                  key={value.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 }}
+                  className="text-center p-8 rounded-2xl border border-gold/10 hover:border-gold/30 transition-all duration-500"
+                >
+                  <div className="w-14 h-14 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 text-gold font-display text-xl">
                     0{index + 1}
                   </div>
-                  <h3 className="font-serif text-2xl mb-4">{value.title}</h3>
-                  <p className="text-black/50 font-light leading-relaxed">{value.desc}</p>
-                </div>
+                  <h3 className="font-display text-2xl text-cream mb-4">{value.title}</h3>
+                  <p className="text-cream-muted font-light leading-relaxed">{value.desc}</p>
+                </motion.div>
               ))}
             </div>
           </div>

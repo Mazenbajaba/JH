@@ -4,52 +4,42 @@ import { useEffect } from 'react';
 
 export default function Chatbot() {
   useEffect(() => {
-    // Load Tajawal Font
     const fontLink = document.createElement('link');
     fontLink.href = 'https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap';
     fontLink.rel = 'stylesheet';
     document.head.appendChild(fontLink);
 
-    // Load n8n Chat CSS
     const link = document.createElement('link');
     link.href = 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
-    // Inject Custom Styles
     const style = document.createElement('style');
     style.innerHTML = `
       :root {
-        --chat--color-primary: #1e3a8a; /* أزرق رئيسي */
-        --chat--color-primary-shade-50: #1e40af;
-        --chat--color-primary-shade-100: #1e429f;
-
-        --chat--color-secondary: #0f172a; /* خلفية المستخدم */
-        --chat--color-secondary-shade-50: #1e293b;
-
-        --chat--color-white: #ffffff;
-        --chat--color-light: #1a1a1a;
-        --chat--color-light-shade-50: #111827;
-        --chat--color-light-shade-100: #1f2937;
-
-        --chat--color-medium: #2c2c2c;
-        --chat--color-dark: #000000;
-
-        --chat--message--bot--background: var(--chat--color-primary);
-        --chat--message--bot--color: var(--chat--color-white);
-        --chat--message--user--background: var(--chat--color-secondary);
-        --chat--message--user--color: var(--chat--color-white);
-
-        --chat--toggle--background: var(--chat--color-primary);
-        --chat--toggle--hover--background: var(--chat--color-primary-shade-50);
-        --chat--toggle--active--background: var(--chat--color-primary-shade-100);
-        --chat--toggle--color: var(--chat--color-white);
-
-        --chat--header--background: var(--chat--color-dark);
-        --chat--header--color: var(--chat--color-white);
+        --chat--color-primary: #d4af37;
+        --chat--color-primary-shade-50: #b8962f;
+        --chat--color-primary-shade-100: #a8905c;
+        --chat--color-secondary: #1a1a1a;
+        --chat--color-secondary-shade-50: #2a2a2a;
+        --chat--color-white: #f5f0e8;
+        --chat--color-light: #141414;
+        --chat--color-light-shade-50: #1a1a1a;
+        --chat--color-light-shade-100: #2a2a2a;
+        --chat--color-medium: #3a3a3a;
+        --chat--color-dark: #0a0a0a;
+        --chat--message--bot--background: #1a1a1a;
+        --chat--message--bot--color: #f5f0e8;
+        --chat--message--user--background: #d4af37;
+        --chat--message--user--color: #0a0a0a;
+        --chat--toggle--background: #d4af37;
+        --chat--toggle--hover--background: #e8c547;
+        --chat--toggle--active--background: #b8962f;
+        --chat--toggle--color: #0a0a0a;
+        --chat--header--background: #0a0a0a;
+        --chat--header--color: #f5f0e8;
       }
 
-      /* دعم الاتجاه RTL */
       #n8n-chat,
       .n8n-chat-container,
       .n8n-chat-bubble,
@@ -59,10 +49,25 @@ export default function Chatbot() {
         text-align: right !important;
         font-family: 'Tajawal', sans-serif !important;
       }
+
+      .n8n-chat-window {
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        border-radius: 16px !important;
+        overflow: hidden;
+      }
+
+      .n8n-chat-header {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%) !important;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
+      }
+
+      .n8n-chat-toggle-button {
+        background: linear-gradient(135deg, #d4af37 0%, #e8c547 100%) !important;
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4) !important;
+      }
     `;
     document.head.appendChild(style);
 
-    // Initialize Chat
     const script = document.createElement('script');
     script.type = 'module';
     script.innerHTML = `

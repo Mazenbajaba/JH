@@ -84,53 +84,68 @@ export default function Collections() {
     : allProducts.filter(p => p.catId === selectedCategory);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-luxury-black">
       <Header />
       
       <div className={cn(
-        "pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
-        isRTL ? "font-arabic" : "font-sans"
+        "pt-40 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
+        isRTL ? "font-arabic" : "font-cormorant"
       )}>
-        <div className="text-center mb-16">
-          <h1 className="font-serif text-5xl md:text-6xl mb-6">{t('collectionsTitle')}</h1>
-          <p className="text-black/50 max-w-2xl mx-auto font-light mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-cream mb-6">
+            {t('collectionsTitle')}
+          </h1>
+          <div className="w-24 h-[1px] bg-gold mx-auto mb-6" />
+          <p className="text-cream-muted max-w-2xl mx-auto font-light text-lg leading-relaxed">
             {t('collectionsDesc')}
           </p>
 
-          {/* Skin Tone Selector */}
-          <div className="flex flex-col items-center gap-4">
-            <span className="text-[10px] uppercase tracking-widest font-bold text-black/40">{t('selectSkinTone')}</span>
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col items-center gap-6 mt-12">
+            <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-gold-muted">
+              {t('selectSkinTone')}
+            </span>
+            <div className="flex items-center gap-5">
               {skinTones.map((tone) => (
                 <button
                   key={tone.id}
                   onClick={() => setSelectedTone(tone.id)}
-                  className={`group relative flex flex-col items-center gap-2 transition-all ${selectedTone === tone.id ? 'scale-110' : 'opacity-50 hover:opacity-100'}`}
+                  className={cn(
+                    "group relative flex flex-col items-center gap-3 transition-all duration-300",
+                    selectedTone === tone.id ? 'scale-110' : 'opacity-40 hover:opacity-80'
+                  )}
                 >
                   <div 
-                    className="w-10 h-10 rounded-full border border-black/5 shadow-sm flex items-center justify-center"
+                    className={cn(
+                      "w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300",
+                      selectedTone === tone.id ? 'border-gold shadow-[0_0_20px_rgba(212,175,55,0.4)]' : 'border-gold/20'
+                    )}
                     style={{ backgroundColor: tone.color }}
                   >
-                    {selectedTone === tone.id && <Check size={14} className="text-black/40" />}
+                    {selectedTone === tone.id && <Check size={16} className="text-luxury-black" />}
                   </div>
-                  <span className="text-[9px] uppercase tracking-tighter font-bold">{tone.label}</span>
+                  <span className="text-[10px] uppercase tracking-wider font-medium text-gold-muted">
+                    {tone.label}
+                  </span>
                 </button>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Filter Bar */}
         <div className="flex flex-wrap justify-center gap-4 mb-16">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
               className={cn(
-                "px-8 py-2 rounded-full border text-xs uppercase tracking-widest font-bold transition-all",
+                "px-8 py-3 rounded-full border text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300",
                 selectedCategory === cat.id 
-                  ? "bg-black text-white border-black" 
-                  : "border-black/5 hover:bg-black hover:text-white"
+                  ? "bg-gold text-luxury-black border-gold" 
+                  : "border-gold/20 text-gold-muted hover:border-gold hover:text-gold"
               )}
             >
               {cat.name}
@@ -138,16 +153,16 @@ export default function Collections() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts.map((product, index) => (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               className="group cursor-pointer"
             >
-              <div className="relative aspect-[4/5] overflow-hidden mb-6 bg-gray-50 rounded-2xl group">
+              <div className="relative aspect-[4/5] overflow-hidden mb-6 bg-luxury-charcoal rounded-2xl border border-gold/10 group-hover:border-gold/30 transition-all duration-500">
                 <Image
                   src={product.images[selectedTone]}
                   alt={product.name}
@@ -156,10 +171,13 @@ export default function Collections() {
                   referrerPolicy="no-referrer"
                 />
                 
-                {/* Hover Overlay for Skin Tone Quick Select */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-4">
-                  <span className="text-[10px] text-white uppercase tracking-widest font-bold">{t('previewOnSkin')}</span>
-                  <div className="flex gap-3">
+                <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="absolute inset-0 bg-luxury-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-5">
+                  <span className="text-[10px] text-gold uppercase tracking-[0.2em] font-medium">
+                    {t('previewOnSkin')}
+                  </span>
+                  <div className="flex gap-4">
                     {skinTones.map((tone) => (
                       <button
                         key={tone.id}
@@ -167,7 +185,10 @@ export default function Collections() {
                           e.stopPropagation();
                           setSelectedTone(tone.id);
                         }}
-                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${selectedTone === tone.id ? 'border-white' : 'border-transparent'}`}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 transition-all duration-300 hover:scale-110",
+                          selectedTone === tone.id ? 'border-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]' : 'border-white/20 hover:border-white/50'
+                        )}
                         style={{ backgroundColor: tone.color }}
                         title={tone.label}
                       />
@@ -179,7 +200,7 @@ export default function Collections() {
                       const chatBtn = document.querySelector('.n8n-chat-button') as HTMLElement;
                       if (chatBtn) chatBtn.click();
                     }}
-                    className="bg-white text-black px-6 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold hover:bg-black hover:text-white transition-all shadow-xl"
+                    className="bg-gold text-luxury-black px-6 py-2 rounded-full text-[10px] uppercase tracking-[0.15em] font-semibold hover:bg-gold-light transition-all mt-2"
                   >
                     {t('inquireNow')}
                   </button>
@@ -187,8 +208,8 @@ export default function Collections() {
               </div>
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-serif text-lg mb-1">{product.name}</h3>
-                  <p className="text-black/40 text-xs uppercase tracking-widest font-medium">{product.category}</p>
+                  <h3 className="font-display text-xl text-cream mb-1">{product.name}</h3>
+                  <p className="text-gold-muted text-xs uppercase tracking-widest font-medium">{product.category}</p>
                 </div>
               </div>
             </motion.div>

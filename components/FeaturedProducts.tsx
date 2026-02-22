@@ -4,8 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Check } from 'lucide-react';
-
+import { Check, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { cn } from '@/lib/utils';
 
@@ -66,71 +65,90 @@ export default function FeaturedProducts() {
 
   return (
     <section className={cn(
-      "py-24 bg-white",
-      isRTL ? "font-arabic" : "font-sans"
+      "py-32 bg-luxury-gradient",
+      isRTL ? "font-arabic" : "font-cormorant"
     )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl md:text-5xl mb-4">{t('featuredTitle')}</h2>
-          <div className="w-20 h-[1px] bg-black/20 mx-auto mb-6" />
-          <p className="text-black/50 max-w-xl mx-auto font-light mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-20"
+        >
+          <h2 className="font-display text-5xl md:text-6xl lg:text-7xl text-cream mb-6">
+            {t('featuredTitle')}
+          </h2>
+          <div className="w-24 h-[1px] bg-gold mx-auto mb-6" />
+          <p className="text-cream-muted max-w-xl mx-auto font-light text-lg leading-relaxed">
             {t('featuredDescription')}
           </p>
 
-          {/* Skin Tone Selector */}
-          <div className="flex flex-col items-center gap-4">
-            <span className="text-[10px] uppercase tracking-widest font-bold text-black/40">{t('selectSkinTone')}</span>
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col items-center gap-6 mt-12">
+            <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-gold-muted">
+              {t('selectSkinTone')}
+            </span>
+            <div className="flex items-center gap-5">
               {skinTones.map((tone) => (
                 <button
                   key={tone.id}
                   onClick={() => setSelectedTone(tone.id)}
-                  className={`group relative flex flex-col items-center gap-2 transition-all ${selectedTone === tone.id ? 'scale-110' : 'opacity-50 hover:opacity-100'}`}
+                  className={cn(
+                    "group relative flex flex-col items-center gap-3 transition-all duration-300",
+                    selectedTone === tone.id ? 'scale-110' : 'opacity-40 hover:opacity-80'
+                  )}
                 >
                   <div 
-                    className="w-10 h-10 rounded-full border border-black/5 shadow-sm flex items-center justify-center"
+                    className={cn(
+                      "w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300",
+                      selectedTone === tone.id ? 'border-gold shadow-[0_0_20px_rgba(212,175,55,0.4)]' : 'border-gold/20'
+                    )}
                     style={{ backgroundColor: tone.color }}
                   >
-                    {selectedTone === tone.id && <Check size={14} className="text-black/40" />}
+                    {selectedTone === tone.id && <Check size={16} className="text-luxury-black" />}
                   </div>
-                  <span className="text-[9px] uppercase tracking-tighter font-bold">{tone.label}</span>
+                  <span className="text-[10px] uppercase tracking-wider font-medium text-gold-muted">
+                    {tone.label}
+                  </span>
                 </button>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
           {products.map((product, index) => (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              transition={{ duration: 0.7, delay: index * 0.15 }}
               className="group"
             >
-              <div className="relative aspect-[4/5] overflow-hidden mb-6 bg-gray-50 rounded-2xl group">
+              <div className="relative aspect-[4/5] overflow-hidden mb-6 bg-luxury-charcoal rounded-2xl border border-gold/10 group-hover:border-gold/30 transition-all duration-500">
                 <motion.div
                   key={`${product.id}-${selectedTone}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8 }}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6 }}
                   className="absolute inset-0"
                 >
                   <Image
                     src={product.images[selectedTone]}
                     alt={product.name}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                   />
                 </motion.div>
                 
-                {/* Hover Overlay for Skin Tone Quick Select */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-4">
-                  <span className="text-[10px] text-white uppercase tracking-widest font-bold">{t('previewOnSkin')}</span>
-                  <div className="flex gap-3">
+                <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="absolute inset-0 bg-luxury-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-5">
+                  <span className="text-[10px] text-gold uppercase tracking-[0.2em] font-medium">
+                    {t('previewOnSkin')}
+                  </span>
+                  <div className="flex gap-4">
                     {skinTones.map((tone) => (
                       <button
                         key={tone.id}
@@ -138,30 +156,39 @@ export default function FeaturedProducts() {
                           e.stopPropagation();
                           setSelectedTone(tone.id);
                         }}
-                        className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${selectedTone === tone.id ? 'border-white' : 'border-transparent'}`}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 transition-all duration-300 hover:scale-110",
+                          selectedTone === tone.id ? 'border-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]' : 'border-white/20 hover:border-white/50'
+                        )}
                         style={{ backgroundColor: tone.color }}
                         title={tone.label}
                       />
                     ))}
                   </div>
+                  <button 
+                    onClick={() => {
+                      const chatBtn = document.querySelector('.n8n-chat-button') as HTMLElement;
+                      if (chatBtn) chatBtn.click();
+                    }}
+                    className="bg-gold text-luxury-black px-6 py-2 rounded-full text-[10px] uppercase tracking-[0.15em] font-semibold hover:bg-gold-light transition-all mt-2"
+                  >
+                    {t('inquireNow')}
+                  </button>
                 </div>
               </div>
-              <h3 className="font-serif text-xl mb-2">{product.name}</h3>
-              <p className="text-black/60 text-sm mb-6 leading-relaxed font-light">
+              <h3 className="font-display text-xl text-cream mb-2">{product.name}</h3>
+              <p className="text-cream-muted text-sm mb-4 leading-relaxed line-clamp-2">
                 {product.description}
               </p>
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={() => {
-                    // Trigger n8n chat for inquiry
-                    const chatBtn = document.querySelector('.n8n-chat-button') as HTMLElement;
-                    if (chatBtn) chatBtn.click();
-                  }}
-                  className="text-xs uppercase tracking-[0.2em] font-bold border-b border-black/20 pb-1 hover:border-black transition-colors"
-                >
-                  {t('inquireNow')}
-                </button>
-              </div>
+              <button 
+                onClick={() => {
+                  const chatBtn = document.querySelector('.n8n-chat-button') as HTMLElement;
+                  if (chatBtn) chatBtn.click();
+                }}
+                className="text-gold text-xs uppercase tracking-[0.2em] font-medium border-b border-gold/30 pb-1 hover:border-gold transition-colors"
+              >
+                {t('inquireNow')}
+              </button>
             </motion.div>
           ))}
         </div>
@@ -169,8 +196,9 @@ export default function FeaturedProducts() {
         <div className="text-center">
           <Link
             href="/collections"
-            className="inline-block border border-black px-12 py-4 rounded-full text-xs uppercase tracking-widest font-bold hover:bg-black hover:text-white transition-all"
+            className="btn-outline-gold px-10 py-4 rounded-full text-xs tracking-[0.2em] inline-flex items-center gap-3"
           >
+            <ArrowLeft className={cn("w-4 h-4", isRTL ? "rotate-180" : "")} />
             {t('showAll')}
           </Link>
         </div>
