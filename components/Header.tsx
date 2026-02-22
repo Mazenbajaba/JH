@@ -1,0 +1,96 @@
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { motion } from 'motion/react';
+import { Menu, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const navItems = [
+  { name: 'Home', href: '/' },
+  { name: 'Collections', href: '/collections' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
+];
+
+export default function Header() {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const pathname = usePathname();
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/5">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          <div className="flex-shrink-0">
+            <Link href="/" className="font-serif text-2xl tracking-widest font-bold text-black">
+              AURELIA
+            </Link>
+          </div>
+
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  "text-sm uppercase tracking-widest transition-colors hover:text-black/60",
+                  pathname === item.href ? "text-black font-semibold" : "text-black/40"
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <Link
+              href="/contact"
+              className="bg-black text-white px-6 py-2 rounded-full text-sm uppercase tracking-widest font-medium hover:bg-black/80 transition-all"
+            >
+              Contact Us
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-black p-2 focus:outline-none"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Nav */}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="md:hidden bg-white border-b border-black/5 px-4 pt-2 pb-6 space-y-4"
+        >
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={() => setIsOpen(false)}
+              className={cn(
+                "block text-sm uppercase tracking-widest py-2",
+                pathname === item.href ? "text-black font-semibold" : "text-black/40"
+              )}
+            >
+              {item.name}
+            </Link>
+          ))}
+          <Link
+            href="/contact"
+            onClick={() => setIsOpen(false)}
+            className="block bg-black text-white px-6 py-3 rounded-full text-sm uppercase tracking-widest font-medium text-center"
+          >
+            Contact Us
+          </Link>
+        </motion.div>
+      )}
+    </header>
+  );
+}
